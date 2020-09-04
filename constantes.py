@@ -1,6 +1,6 @@
 INPUTFORARCHDESC="data/inputForArchdesc.csv"
 OUTPUTARCHDESC="data/headerArchdesc.xml"
-INPUTFILE="data/inputAgathe.csv"
+INPUTFILE="data/input_archivesDesArchives.csv"
 OUTPUCOPY="data/csv_input_copy.csv"
 OUTPUTCALAMES ="data/sortieEADNiveauxC.xml"
 
@@ -16,5 +16,6 @@ CODEROLEAUTEUR = {"Auteur":"070", "Annotateur":"020",
 # CALAMES
 ATTRIBIDENTIFIANTCALAMES = "_631139801_"
 NIVEAUDEUX = "series"
-NIVEAUTROIX = "item"
+NIVEAUTROIX = "file"
+NIVEAUQUATRE = "item"
 

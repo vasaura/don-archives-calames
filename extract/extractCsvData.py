@@ -6,16 +6,16 @@ def extractNormaliseDates (dateNiveau):
     """
     Fonction qui extrait les dates rensignées sous ce format: 27-10-2017
     :param dateNiveau: str colonne dane
-    :return: str la date en format normalisée
+    :return: str la date en format normalisée 2017-10-27
     """
     date = dateNiveau
     # si la date est sous la forme de AAAA
     if len(date) == 4:
         datenorm = date
     # si la date est sous la forme de AAAA-MM
-    elif len(date) == 7 and "/" in date:
-        datenorm = str(datetime.strptime(date, "%m%Y"))[:7]
-    elif len(date) == 10 and "s.d" not in date and "/" in date :
+    elif len(date) == 7 :
+        datenorm = str(datetime.strptime(date, "%m-%Y"))[:7]
+    elif len(date) == 10 and "s.d" not in date :
         datenorm = str(datetime.strptime(date, "%d-%m-%Y"))[:10]
     elif "s.d" in date:
         dateTestObject = re.search( "[0-9]{4}", date)
@@ -49,7 +49,6 @@ def extractPhysfacet (physfacet, typepysfacet, titre, cote):
     return pairPhysfacetType
 
 
-
 def extractTypeNormalGenreform(typeG, normalG, cote, titre):
     #typeGenreform
 
@@ -71,12 +70,11 @@ def extractTypeNormalGenreform(typeG, normalG, cote, titre):
     return pairTypeNormalGenreform
 
 
-
-def extractRoleNormalPersname (persame, role, idref, cote3, codeRoleAuteurs):
+def extractRoleNormalPersname (persname, role, idref, cote3, codeRoleAuteurs):
     """
     fonction qui extraire le nom, le role et/ou le idref des colonnes du fichier
     csv de métadonnées Calames et Nakala
-    :param persame: le nom de la personne sous forme de list
+    :param persname: le nom de la personne sous forme de list
     :param role: le rôle sous forme de list
     :param idref: le idref sous forme de list
     :param cote3: la côte du niveau sous forme de str
@@ -86,8 +84,8 @@ def extractRoleNormalPersname (persame, role, idref, cote3, codeRoleAuteurs):
 
     # séparer les noms des personnes du champ persname sur le  ";" et récupérer les noms dans une liste
     listPersnameNiveau3 = []
-    if persame:
-        listPersnameNiveau3 = persame.split(";")
+    if persname:
+        listPersnameNiveau3 = persname.split(";")
 
     # définnir une liste pour enregistrer les codes Calames des roles.
     listCodeRolepersname3 = []
