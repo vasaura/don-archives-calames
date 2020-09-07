@@ -13,9 +13,5 @@ CODEROLEAUTEUR = {"Auteur":"070", "Annotateur":"020",
                   "Illustrateur": "440", "Imprimeur ou éditeur": "610", "Interprète":"590",
                   "Propriétaire précédent": "390", "Relieur": "110", "Traducteur": "730"}
 
-# CALAMES
+# Identifiant attribué par CALAMES au moment de la création du IR
 ATTRIBIDENTIFIANTCALAMES = "_631139801_"
-NIVEAUDEUX = "series"
-NIVEAUTROIX = "file"
-NIVEAUQUATRE = "item"
-

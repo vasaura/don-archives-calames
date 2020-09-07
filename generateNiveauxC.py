@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 import csv
-from constantes import ATTRIBIDENTIFIANTCALAMES, NIVEAUDEUX, NIVEAUTROIX, INPUTFILE, OUTPUTCALAMES, CODEROLEAUTEUR, NIVEAUQUATRE
+from constantes import ATTRIBIDENTIFIANTCALAMES, INPUTFILE, OUTPUTCALAMES, CODEROLEAUTEUR
 from extract.extractCsvData import extractNormaliseDates, extractPhysfacet, extractRoleNormalPersname, extractTypeNormalGenreform
 
 
@@ -11,23 +11,23 @@ from extract.extractCsvData import extractNormaliseDates, extractPhysfacet, extr
 racine = ET.Element("dsc")
 def createLevel2():
     global cNiveau2, unitdateNiveau3, tuple, physfacetNiveau2
-    cNiveau2 = ET.SubElement(racine, "c", level=NIVEAUDEUX, id=ATTRIBIDENTIFIANTCALAMES + ligne["coteNiveau2"])
+    cNiveau2 = ET.SubElement(racine, "c", level=ligne["levelNiveau2"], id=ATTRIBIDENTIFIANTCALAMES + ligne["coteNiveau2"])
     didNiveau2 = ET.SubElement(cNiveau2, "did")
     unitidNiveau2 = ET.SubElement(didNiveau2, "unitid", type="cote")
     unitidNiveau2.text = ligne["coteNiveau2"]
     unittitleNiveau2 = ET.SubElement(didNiveau2, "unittitle")
-    unittitleNiveau2.text = ligne["TitreNiveau2"]
+    unittitleNiveau2.text = ligne["titreNiveau2"]
 
     # Dates
     if date2Debut and date2Fin:
         unitdate2Extreme = ET.SubElement(didNiveau2, "unitdate", calendar="gregorian", era="ce",
                                          normal=date2Debut + "/" + date2Fin)
-        unitdate2Extreme.text = "du " + ligne["DateNiveau2Debut"] + " au " + ligne["DateNiveau2Fin"]
+        unitdate2Extreme.text = "du " + ligne["dateNiveau2Debut"] + " au " + ligne["dateNiveau2Fin"]
 
     elif date2Debut:
         unitdateNiveau2 = ET.SubElement(didNiveau2, "unitdate", calendar="gregorian", era="ce",
                                         normal=date2Debut)
-        unitdateNiveau2.text = ligne["DateNiveau2Debut"]
+        unitdateNiveau2.text = ligne["dateNiveau2Debut"]
 
     # Physfacet
     if pairPhysfacetType2 or ligne["extentNiveau2"] or ligne["dimensionNiveau2"]:
@@ -65,7 +65,7 @@ def createLevel2():
             corpnameNiveau2.set("role", roleC2)
         else:
             corpnameNiveau2.set("role", ligne["roleCorpname2"])
-            print("Attention, le rôle pour cette Organisation n'a pas de code ", ligne["CoteNiveau2"])
+            print("Attention, le rôle pour cette Organisation n'a pas de code ", ligne["coteNiveau2"])
 
         if idrefcorpname2:
             corpnameNiveau2.set("id", idrefcorpname2)
@@ -88,18 +88,18 @@ def createLevel2():
 def createLevel3():
     global cNiveau3, didNiveau3, unitidNiveau3, unittitleNiveau3, unitdateExtreme, unitdateNiveau3, physdescNiveau3, tuple, physfacetNiveau2, extentNiveau3, dimensionNiveau3, scopecontentNiveau3, paragrapheNiv3, person, controlaccesNiveau3, persnameNiveau3, role, corpnameNiveau3, roleC3, geognameNiveau3, subjectNiveau3, genreformNiveau3
 
-    cNiveau3 = ET.SubElement(cNiveau2, "c", level=NIVEAUTROIX, id=ATTRIBIDENTIFIANTCALAMES + ligne["CoteNiveau3"])
+    cNiveau3 = ET.SubElement(cNiveau2, "c", level=ligne["levelNiveau3"], id=ATTRIBIDENTIFIANTCALAMES + ligne["coteNiveau3"])
     didNiveau3 = ET.SubElement(cNiveau3, "did")
     unitidNiveau3 = ET.SubElement(didNiveau3, "unitid", type="cote")
-    unitidNiveau3.text = ligne["CoteNiveau3"].strip()
+    unitidNiveau3.text = ligne["coteNiveau3"].strip()
     unittitleNiveau3 = ET.SubElement(didNiveau3, "unittitle")
-    unittitleNiveau3.text = ligne["TitreNiveau3"].strip()
+    unittitleNiveau3.text = ligne["titreNiveau3"].strip()
 
     ###-------DATES ---------------###
 
     # si les dates de debut et de fin niveau2 et 3 sont identiques et que les champs dates ne sont pas vides, alerte répétition. utilisation des dates normalisées dans les conditions. utilisation des dates saisies pour l'affichage dans calames
     if date2Debut != "" and date3Debut != "" and date2Debut == date3Debut and date2Fin==date3Fin:
-        print("ATTENTION LES DATES DU NIVEAU 2 ET 3 se répetent: ", ligne["CoteNiveau3"])
+        print("ATTENTION LES DATES DU NIVEAU 2 ET 3 se répetent: ", ligne["coteNiveau3"])
 
     # si la date niveau 2 est vide et celle de niveau 3 existe, prendre celle du niveau3
     elif date2Debut == "" and date3Debut:
@@ -108,20 +108,20 @@ def createLevel3():
         if date3Debut and date3Fin:
             unitdateExtreme = ET.SubElement(didNiveau3, "unitdate", calendar="gregorian", era="ce",
                                             normal=date3Debut + "/" + date3Fin)
-            unitdateExtreme.text = "du " + ligne["DateNiveau3Debut"] + " au " + ligne["DateNiveau3Fin"]
+            unitdateExtreme.text = "du " + ligne["dateNiveau3Debut"] + " au " + ligne["dateNiveau3Fin"]
         # sinon, prendre que la date3 du début
         else:
             unitdateNiveau3 = ET.SubElement(didNiveau3, "unitdate", calendar="gregorian", era="ce", normal=date3Debut)
-            unitdateNiveau3.text = ligne["DateNiveau3Debut"]
+            unitdateNiveau3.text = ligne["dateNiveau3Debut"]
 
     # si la date de niveau 3 existe (peu importe si celle de niveau 2 exite)
     elif date3Debut :
         unitdateNiveau3 = ET.SubElement(didNiveau3, "unitdate", calendar="gregorian", era="ce", normal=date3Debut)
-        unitdateNiveau3.text = ligne["DateNiveau3Debut"]
+        unitdateNiveau3.text = ligne["dateNiveau3Debut"]
 
     # si les dates 2 et 3 sont vides, lancer une alerte
     elif date2Debut == "" and date3Debut == "":
-        print ("ATTENTION, la date manque ou elle est décrite au niveau Archdesc pour cette ressource : ", ligne["CoteNiveau3"].strip())
+        print ("ATTENTION, la date manque ou elle est décrite au niveau supérieur pour cette ressource : ", ligne["coteNiveau3"].strip())
 
     ###-------PHYSFACET, EXTENT, DIMENSION ---------------###
 
@@ -196,18 +196,18 @@ def createLevel3():
 def createLevel4():
     global cNiveau4, didNiveau4, unitidNiveau4, unittitleNiveau4, unitdateExtreme4, unitdateNiveau4, physdescNiveau4, tuple, physfacetNiveau3, extentNiveau4, dimensionNiveau4, scopecontentNiveau4, paragrapheNiv4, person, controlaccesNiveau4, persnameNiveau4, role, corpnameNiveau4, roleC4, geognameNiveau4, subjectNiveau4, genreformNiveau4
 
-    cNiveau4 = ET.SubElement(cNiveau3, "c", level=NIVEAUQUATRE, id=ATTRIBIDENTIFIANTCALAMES + ligne["CoteNiveau4"])
+    cNiveau4 = ET.SubElement(cNiveau3, "c", level=ligne["levelNiveau3"], id=ATTRIBIDENTIFIANTCALAMES + ligne["coteNiveau4"])
     didNiveau4 = ET.SubElement(cNiveau4, "did")
     unitidNiveau4 = ET.SubElement(didNiveau4, "unitid", type="cote")
-    unitidNiveau4.text = ligne["CoteNiveau4"].strip()
+    unitidNiveau4.text = ligne["coteNiveau4"].strip()
     unittitleNiveau4 = ET.SubElement(didNiveau4, "unittitle")
-    unittitleNiveau4.text = ligne["TitreNiveau4"].strip()
+    unittitleNiveau4.text = ligne["titreNiveau4"].strip()
 
     ###-------DATES ---------------###
 
     # si les dates de debut et de fin niveau2 et 3 sont identiques et que les champs dates ne sont pas vides, alerte répétition. utilisation des dates normalisées dans les conditions. utilisation des dates saisies pour l'affichage dans calames
     if date3Debut != "" and date4Debut != "" and date3Debut == date4Debut and date3Fin==date4Fin:
-        print("ATTENTION LES DATES DU NIVEAU 3 ET 4 se répetent: ", ligne["CoteNiveau4"])
+        print("ATTENTION LES DATES DU NIVEAU 3 ET 4 se répetent: ", ligne["coteNiveau4"])
 
     # si la date niveau 3 est vide et celle de niveau 4 existe, prendre celle du niveau4
     elif date3Debut == "" and date4Debut:
@@ -216,20 +216,20 @@ def createLevel4():
         if date4Debut and date4Fin:
             unitdateExtreme4 = ET.SubElement(didNiveau4, "unitdate", calendar="gregorian", era="ce",
                                             normal=date4Debut + "/" + date3Fin)
-            unitdateExtreme4.text = "du " + ligne["DateNiveau4Debut"] + " au " + ligne["DateNiveau4Fin"]
+            unitdateExtreme4.text = "du " + ligne["dateNiveau4Debut"] + " au " + ligne["dateNiveau4Fin"]
         # sinon, prendre que la date3 du début
         else:
             unitdateNiveau4 = ET.SubElement(didNiveau4, "unitdate", calendar="gregorian", era="ce", normal=date4Debut)
-            unitdateNiveau4.text = ligne["DateNiveau4Debut"]
+            unitdateNiveau4.text = ligne["dateNiveau4Debut"]
 
     # si la date de niveau 3 existe (peu importe si celle de niveau 2 exite)
     elif date4Debut :
         unitdateNiveau4 = ET.SubElement(didNiveau4, "unitdate", calendar="gregorian", era="ce", normal=date4Debut)
-        unitdateNiveau4.text = ligne["DateNiveau4Debut"]
+        unitdateNiveau4.text = ligne["dateNiveau4Debut"]
 
     # si les dates 3 et 4 sont vides, lancer une alerte
     elif date3Debut == "" and date4Debut == "":
-        print ("ATTENTION, la date manque ou elle est décrite au niveau Archdesc pour cette ressource : ", ligne["CoteNiveau4"].strip())
+        print ("ATTENTION, la date manque ou elle est décrite au niveau supérieur pour cette ressource : ", ligne["coteNiveau4"].strip())
 
     ###-------PHYSFACET, EXTENT, DIMENSION ---------------###
 
@@ -294,7 +294,7 @@ def createLevel4():
                 corpnameNiveau4.set("role", roleC4)
             else:
                 corpnameNiveau4.set("role", ligne["roleCorpname4"])
-                print("Attention, le rôle pour cette Organisation n'a pas de code ", ligne["CoteNiveau4"])
+                print("Attention, le rôle pour cette Organisation n'a pas de code ", ligne["coteNiveau4"])
 
             if idrefcorpname4:
                 corpnameNiveau4.set("id", idrefcorpname4)
@@ -338,20 +338,20 @@ with open(INPUTFILE, "r") as fichiercsv:
 
         # -------Normaliser les dates avec la méthode extractNormaliseDates--------#
 
-        date2Debut = extractNormaliseDates(ligne["DateNiveau2Debut"])
-        date2Fin = extractNormaliseDates(ligne["DateNiveau2Fin"])
+        date2Debut = extractNormaliseDates(ligne["dateNiveau2Debut"])
+        date2Fin = extractNormaliseDates(ligne["dateNiveau2Fin"])
 
-        date3Debut = extractNormaliseDates(ligne["DateNiveau3Debut"])
-        date3Fin = extractNormaliseDates(ligne["DateNiveau3Fin"])
+        date3Debut = extractNormaliseDates(ligne["dateNiveau3Debut"])
+        date3Fin = extractNormaliseDates(ligne["dateNiveau3Fin"])
 
-        date4Debut = extractNormaliseDates(ligne["DateNiveau4Debut"])
-        date4Fin = extractNormaliseDates(ligne["DateNiveau4Fin"])
+        date4Debut = extractNormaliseDates(ligne["dateNiveau4Debut"])
+        date4Fin = extractNormaliseDates(ligne["dateNiveau4Fin"])
 
 
         # -------------PERSNAME : Récupérer les roles, idref, pêrsname niveaux 4 avec la metdode extractRoleNormalPersname -----
         if ligne["persnameNiveau4"]:
             pairRoleIdrefPersname4 = extractRoleNormalPersname(ligne["persnameNiveau4"], ligne["rolePersname4"],
-                                                               ligne["idrefpersname4"], ligne["CoteNiveau4"],
+                                                               ligne["idrefpersname4"], ligne["coteNiveau4"],
                                                                CODEROLEAUTEUR)
 
         #--------CORPNAME: Normaliser les noms d'organisations -------#
@@ -370,16 +370,16 @@ with open(INPUTFILE, "r") as fichiercsv:
 
         #-------------Extraire le PHYSFACET et le PhystfacetType avec la méthode extractPhysfacet--------------#
 
-        pairPhysfacetType2 = extractPhysfacet(ligne["physfacetNiveau2"], ligne["typePhysfacet2"], ligne["coteNiveau2"], ligne["TitreNiveau2"])
-        pairPhysfacetType3 = extractPhysfacet(ligne["physfacetNiveau3"], ligne["typePhysfacet3"], ligne["CoteNiveau3"], ligne["TitreNiveau3"])
-        pairPhysfacetType4 = extractPhysfacet(ligne["physfacetNiveau4"], ligne["typePhysfacet4"], ligne["CoteNiveau4"],
-                                              ligne["TitreNiveau4"])
+        pairPhysfacetType2 = extractPhysfacet(ligne["physfacetNiveau2"], ligne["typePhysfacet2"], ligne["coteNiveau2"], ligne["titreNiveau2"])
+        pairPhysfacetType3 = extractPhysfacet(ligne["physfacetNiveau3"], ligne["typePhysfacet3"], ligne["coteNiveau3"], ligne["titreNiveau3"])
+        pairPhysfacetType4 = extractPhysfacet(ligne["physfacetNiveau4"], ligne["typePhysfacet4"], ligne["coteNiveau4"],
+                                              ligne["titreNiveau4"])
 
         # -------------Extraire le GENREFORM: typeGenreform et le normalGenreform avec la methode extractTypeNormalGenreform --------------#
 
-        pairTypeNormalGenreform2 = extractTypeNormalGenreform (ligne["typeGenreform2"],ligne["normalGenreform2"], ligne["coteNiveau2"], ligne["TitreNiveau2"])
-        pairTypeNormalGenreform3 = extractTypeNormalGenreform (ligne["typeGenreform3"],ligne["normalGenreform3"], ligne["CoteNiveau3"], ligne["TitreNiveau3"])
-        pairTypeNormalGenreform4 = extractTypeNormalGenreform(ligne["typeGenreform4"], ligne["normalGenreform4"],ligne["CoteNiveau4"], ligne["TitreNiveau4"])
+        pairTypeNormalGenreform2 = extractTypeNormalGenreform (ligne["typeGenreform2"],ligne["normalGenreform2"], ligne["coteNiveau2"], ligne["titreNiveau2"])
+        pairTypeNormalGenreform3 = extractTypeNormalGenreform (ligne["typeGenreform3"],ligne["normalGenreform3"], ligne["coteNiveau3"], ligne["titreNiveau3"])
+        pairTypeNormalGenreform4 = extractTypeNormalGenreform(ligne["typeGenreform4"], ligne["normalGenreform4"],ligne["coteNiveau4"], ligne["titreNiveau4"])
 
 
 
@@ -390,18 +390,19 @@ with open(INPUTFILE, "r") as fichiercsv:
             #on crée le niveau 2 "serie"
             createLevel2()
             # si le contenu de la cote du niveau 3 est différent du contenu de la ligne précédente
-            if ligne["CoteNiveau3"] != niveau3:
+            if ligne["coteNiveau3"] != niveau3:
                 #on crée le niveau 3, "file" et le premier niveau4 "item"
                 createLevel3()
-                createLevel4()
+                if ligne["coteNiveau4"] != "":
+                    createLevel4()
             # si le contenu de la cote du niveau 3 est identique au contenu de la ligne précédente
-            elif ligne["CoteNiveau3"] == niveau3:
+            elif ligne["coteNiveau3"] == niveau3 and ligne["coteNiveau4"] != "":
                 #on rajoute dans le niveau 3 les balises du niveau 4 "item"
                 createLevel4()
         # si le contenu de la cote du niveau 2 est identique au contenu de la ligne précédente
         else :
             # si le contenu de la cote du niveau 3 est identique au contenu de la ligne précédente
-            if ligne["CoteNiveau3"] == niveau3:
+            if ligne["coteNiveau3"] == niveau3:
                 # on crée uniquement le niveau 4 qui arrive à la suite des autres items dans le dernier "file"
                 createLevel4()
             else:
@@ -410,7 +411,7 @@ with open(INPUTFILE, "r") as fichiercsv:
                 createLevel4()
         #on fini par mettre à jour l'affection des deux variable de teste pour la deuxième boucle.
         niveau2 = ligne["coteNiveau2"]
-        niveau3 = ligne["CoteNiveau3"]
+        niveau3 = ligne["coteNiveau3"]
 
 
         tree = ET.ElementTree(racine)
