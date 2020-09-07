@@ -196,7 +196,7 @@ def createLevel3():
 def createLevel4():
     global cNiveau4, didNiveau4, unitidNiveau4, unittitleNiveau4, unitdateExtreme4, unitdateNiveau4, physdescNiveau4, tuple, physfacetNiveau3, extentNiveau4, dimensionNiveau4, scopecontentNiveau4, paragrapheNiv4, person, controlaccesNiveau4, persnameNiveau4, role, corpnameNiveau4, roleC4, geognameNiveau4, subjectNiveau4, genreformNiveau4
 
-    cNiveau4 = ET.SubElement(cNiveau3, "c", level=ligne["levelNiveau3"], id=ATTRIBIDENTIFIANTCALAMES + ligne["coteNiveau4"])
+    cNiveau4 = ET.SubElement(cNiveau3, "c", level=ligne["levelNiveau4"], id=ATTRIBIDENTIFIANTCALAMES + ligne["coteNiveau4"])
     didNiveau4 = ET.SubElement(cNiveau4, "did")
     unitidNiveau4 = ET.SubElement(didNiveau4, "unitid", type="cote")
     unitidNiveau4.text = ligne["coteNiveau4"].strip()
@@ -324,7 +324,7 @@ def createLevel4():
             # par défaut imposé par Calames : la valeur de l'attribut normal
             genreformNiveau4.text = tuple[1].strip()
 
-# le lancement du parsing du fichier csv et l'application des méthodes pour générer les niveaux c
+# lancement du parsing du fichier csv et l'application des méthodes pour générer les niveaux c
 with open(INPUTFILE, "r") as fichiercsv:
     reader = csv.DictReader(fichiercsv, delimiter =",")
 
@@ -391,25 +391,27 @@ with open(INPUTFILE, "r") as fichiercsv:
             createLevel2()
             # si le contenu de la cote du niveau 3 est différent du contenu de la ligne précédente
             if ligne["coteNiveau3"] != niveau3:
-                #on crée le niveau 3, "file" et le premier niveau4 "item"
+                #on crée le niveau 3, "file" et le premier niveau4 "item" seulement si le niveau 4 existe
                 createLevel3()
                 if ligne["coteNiveau4"] != "":
                     createLevel4()
-            # si le contenu de la cote du niveau 3 est identique au contenu de la ligne précédente
+            # si le contenu de la cote du niveau 3 est identique au contenu de la ligne précédente et si niveau4 existe
             elif ligne["coteNiveau3"] == niveau3 and ligne["coteNiveau4"] != "":
                 #on rajoute dans le niveau 3 les balises du niveau 4 "item"
                 createLevel4()
         # si le contenu de la cote du niveau 2 est identique au contenu de la ligne précédente
         else :
-            # si le contenu de la cote du niveau 3 est identique au contenu de la ligne précédente
-            if ligne["coteNiveau3"] == niveau3:
+            # si le contenu de la cote du niveau 3 est identique au contenu de la ligne précédente et le niveau 4 existe
+            if ligne["coteNiveau3"] == niveau3 and ligne["coteNiveau4"] != "":
+                # on crée uniquement le niveau 4 qui arrive à la suite des autres items dans le dernier "file"
                 # on crée uniquement le niveau 4 qui arrive à la suite des autres items dans le dernier "file"
                 createLevel4()
             else:
-                # autrement, on crée un niveau3 avec le niveau 4 associé
+                # autrement, on crée un niveau3 avec le niveau 4 associé s'il existe
                 createLevel3()
-                createLevel4()
-        #on fini par mettre à jour l'affection des deux variable de teste pour la deuxième boucle.
+                if ligne["coteNiveau4"] != "":
+                    createLevel4()
+        #on finit par mettre à jour l'affection des deux variables de test pour la deuxième boucle.
         niveau2 = ligne["coteNiveau2"]
         niveau3 = ligne["coteNiveau3"]
 
