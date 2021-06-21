@@ -1,0 +1,3 @@
+# don-archives-calames
+Aurelia Vasile, MSH Clermont-Ferrand, 2020
+Application qui prend en entrée un fichier csv et génère en sortie un fichier xml conforme à la DTD EAD (avec les particularités du catalogue Calames).

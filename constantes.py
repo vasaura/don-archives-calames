@@ -1,6 +1,6 @@
 INPUTFORARCHDESC="data/inputForArchdesc.csv"
 OUTPUTARCHDESC="data/headerArchdesc.xml"
-INPUTFILE="data/inputAgathe.csv"
+INPUTFILE="data/archiveDeLarchiveTotal_input.csv"
 OUTPUCOPY="data/csv_input_copy.csv"
 OUTPUTCALAMES ="data/sortieEADNiveauxC.xml"
 
@@ -13,8 +13,5 @@ CODEROLEAUTEUR = {"Auteur":"070", "Annotateur":"020",
                   "Illustrateur": "440", "Imprimeur ou éditeur": "610", "Interprète":"590",
                   "Propriétaire précédent": "390", "Relieur": "110", "Traducteur": "730"}
 
-# CALAMES
+# Identifiant attribué par CALAMES au moment de la création du IR
 ATTRIBIDENTIFIANTCALAMES = "_631139801_"
-NIVEAUDEUX = "series"
-NIVEAUTROIX = "item"
-
