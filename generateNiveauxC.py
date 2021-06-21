@@ -163,7 +163,7 @@ def createLevel3():
                 corpnameNiveau3.set("role", roleC3)
             else:
                 corpnameNiveau3.set("role", ligne["roleCorpname3"])
-                print("Attention, le rôle pour cette Organisation n'a pas de code ", ligne["CoteNiveau3"])
+                print("Attention, le rôle pour cette Organisation n'a pas de code ", ligne["coteNiveau3"])
 
             if idrefcorpname3:
                 corpnameNiveau3.set("id", idrefcorpname3)

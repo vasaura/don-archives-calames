@@ -1,6 +1,6 @@
 INPUTFORARCHDESC="data/inputForArchdesc.csv"
 OUTPUTARCHDESC="data/headerArchdesc.xml"
-INPUTFILE="data/input_archivesDesArchives.csv"
+INPUTFILE="data/archiveDeLarchiveTotal_input.csv"
 OUTPUCOPY="data/csv_input_copy.csv"
 OUTPUTCALAMES ="data/sortieEADNiveauxC.xml"
 
